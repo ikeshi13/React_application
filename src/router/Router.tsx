@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { Login } from "../components/pages/Login";
 import { HomeRoutes } from "./HomeRoutes";
 import { Page404 } from "../components/pages/page404";
+import { HeaderLayout } from "../components/templates/HeaderLayout";
 
 export const Router = () => {
   return (
@@ -20,7 +21,9 @@ export const Router = () => {
                   exact={route.exact}
                   path={`${url}${route.path}`}
                 >
-                {route.children}
+
+                <HeaderLayout>{route.children}</HeaderLayout>
+
                 </Route>
               ))}
             </Switch>
