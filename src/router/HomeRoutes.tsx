@@ -23,7 +23,7 @@ export const HomeRoutes = [
 
     },
     {
-        path:"",
+        path:"*",
         exact:false,
         children:<Page404/>
 
