@@ -4,27 +4,33 @@ import { UserCard } from "../organisms/user/userCard";
 import { useAllusers } from "../../hooks/useAllusers";
 import { UserDetailModal } from "../organisms/user/UserDetailModal";
 import { useSelectUsers } from "../../hooks/useSelectUsers ";
+import { useLoginUser } from "../../hooks/useLoginUser";
 
 export const UserManagement: FC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { getUsers, users, loading } = useAllusers();
   const { selectedUser, onSelectUser } = useSelectUsers();
+  const { loginUser } = useLoginUser();
 
   useEffect(() => getUsers(), []);
 
-  const onClickUser = useCallback((id: number) => {
-    console.log("user一覧");
-    console.log(users);
-    onSelectUser({ id, users, onOpen });
-  }, []);
+  const onClickUser = useCallback(
+    (id: number) => {
+      onSelectUser({ id, users, onOpen });
+    },
+    [users, onSelectUser, onOpen]
+  );
 
   return (
     <>
+      /**ロードフラグがtrueの場合はチャクラUIのスピナーを設定 */
       {loading ? (
         <Center h={"100vh"}>
           <Spinner />
         </Center>
       ) : (
+        /**ロードフラグがfalseの場合ユーザー一覧を表示
+         */
         <Wrap p={{ base: "4", md: "10" }}>
           {users.map((user) => (
             <WrapItem key={user.id} mx={"auto"}>
@@ -33,7 +39,7 @@ export const UserManagement: FC = memo(() => {
           ))}
         </Wrap>
       )}
-      <UserDetailModal isOpen={isOpen} onClose={onClose} />
+      <UserDetailModal user={selectedUser} isOpen={isOpen} onClose={onClose} isAdmin={loginUser?.isAdmin} />
     </>
   );
 });
